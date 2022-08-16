@@ -48,7 +48,7 @@ public class MappingProfile : Profile
 //Generator code
  public static partial class DTOMapper
 {
-    public static global::ConsoleApp.DTO MapperToDTO(this global::ConsoleApp4.Entity source)
+    public static global::ConsoleApp.DTO MapperToDTO(this global::ConsoleApp.Entity source)
     {
         global::ConsoleApp4.DTO result = new();
         global::System.Func<global::ConsoleApp.Entity, string> EmpNoMapper = src => src.Account[0..4];
