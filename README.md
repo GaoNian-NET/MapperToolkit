@@ -1,5 +1,5 @@
 # MapperToolkit
-![Nuget](https://img.shields.io/badge/nuget-1.0.1.6--alpha-blue)
+![Nuget](https://img.shields.io/badge/nuget-1.0.1.7--alpha-blue)
 ![GitHub](https://img.shields.io/badge/license-Apache--2.0-green)
 
 
