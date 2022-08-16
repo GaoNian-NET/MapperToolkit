@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>10</LangVersion>
+
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Title>MapperToolkit</Title>
+		<Description>
+			This package is a Mapper library use  Source Generator with function such as:
+- mapper: object-object mapper .
+- transoform:by object (entity) build specified model (DTO) .
+		</Description>
+		<Version>1.0.1.7-alpha</Version>
+		<Authors>Nian Gao</Authors>
+		<PackageTags>Mapper SourceGenerator</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+
+		<RepositoryType>git</RepositoryType>
+		<RepositoryURL>https://github.com/GaoNian-NET/MapperToolkit</RepositoryURL>
+		
+	
+</PropertyGroup>
+	<ItemGroup Label="Package">
+		<None Include="..\MapperToolkit.SourceGenerators\bin\$(Configuration)\netstandard2.0\MapperToolkit.SourceGenerators.dll" PackagePath="analyzers\dotnet\roslyn4.0\cs" Pack="true" Visible="false" />
+	</ItemGroup>
+</Project>
