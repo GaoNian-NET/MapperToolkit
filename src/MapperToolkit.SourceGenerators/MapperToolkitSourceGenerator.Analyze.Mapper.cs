@@ -43,7 +43,12 @@ public partial class MapperSourceGenerator
                     {
                         SourceMember = sourceMember,
                         DestinationMember = destinationMember,
-                        MapperExpression = $"{sourceMember.MemberName}.MapperTo{destinationMember.Type.Name}()",
+                        MapperExpression =
+                        
+                        (destinationMember.Type.TypeKind, sourceMember.Type.TypeKind)
+                        is  (TypeSymbolInfoKind.Object, TypeSymbolInfoKind.Object)
+                        ? $"source.{sourceMember.MemberName}.MapperTo{destinationMember.Type.Name}()"
+                        : $"MapperTo{destinationMember.Type.Name}(source.{sourceMember.MemberName})",
                         Kind = destinationMember.Type.TypeKind
 
                     });
@@ -81,9 +86,6 @@ public partial class MapperSourceGenerator
                 var parameterType = methoInfo.ParameterSymbols.First().Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                 member = member with { NeedMapper = true, Type = methoInfo.TypeArgument[0].GetInfo() };
 
-                //var lambda = methoInfo.ExpressionSyntaxes.OfType<SimpleLambdaExpressionSyntax>().First();
-                //var tokens = lambda.ExpressionBody!.ChildNodes().GetChildToken(lambda.Parameter.Identifier.Value!, new());
-                //static string NameMapper(dynamic src) => src.Name.Substring(1, 2);
 
                 @object.Mappers.Add(new MapperInfo()
                 {

@@ -47,7 +47,7 @@ public partial class MapperSourceGenerator : IIncrementalGenerator
             foreach (var expressionStatementSyntax in expressionStatementSyntaxs)
             {
                 var methoInfos = expressionStatementSyntax.Expression.MethoInfoEnumerator(item.SemanticModel);
-               
+
                 var baseInfo = expressionStatementSyntax.Expression.GetBaseInfo();
                 var (filename, code) = CreateCode(methoInfos, baseInfo);
                 context.AddSource(filename, code);

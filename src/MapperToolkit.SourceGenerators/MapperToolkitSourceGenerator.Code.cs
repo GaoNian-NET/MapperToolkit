@@ -42,29 +42,29 @@ public partial class MapperSourceGenerator
 
 
 
-    private IEnumerable<MemberDeclarationSyntax> CreateIEnumerableMapperMetho(SourceObejct @object)
+    private IEnumerable<StatementSyntax> CreateIEnumerableMapperMetho(SourceObejct @object)
     {
         if (@object.SubMappers is null)
         {
             yield break;
         }
 
-        var GetBody = (SubMapperInfo subMapper) => subMapper.Kind switch
+        static BlockSyntax? GetBody(SubMapperInfo subMapper) => subMapper.Kind switch
         {
             TypeSymbolInfoKind.Array => Block(
-                ParseStatement($"var result = new {subMapper.DestinationMember.Type.OriginalFullyQualifiedName.TrimEnd(']')}source.{subMapper.SourceMember.Type.LengthExpression}];"),
+                ParseStatement($"var _result = new {subMapper.DestinationMember.Type.OriginalFullyQualifiedName.TrimEnd(']')}_source.{subMapper.SourceMember.Type.LengthExpression}];"),
                 ParseForStatement(
-                        $"for (var i=0; i < source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
-                        , $"result[i] = source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}();"),
-                    ParseStatement("return result;")),
+                        $"for (var i=0; i < _source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
+                        , $"_result[i] = _source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}();"),
+                    ParseStatement("return _result;")),
             TypeSymbolInfoKind.Enumerator => Block(ParseForStatement(
-                    $"for (var i=0; i < source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
-                    , $"yield return source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}();")),
-            TypeSymbolInfoKind.Enumerable => Block(ParseStatement($"var result = new {subMapper.DestinationMember.Type.OriginalFullyQualifiedName}();"),
+                    $"for (var i=0; i < _source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
+                    , $"yield return _source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}();")),
+            TypeSymbolInfoKind.Enumerable => Block(ParseStatement($"var _result = new {subMapper.DestinationMember.Type.OriginalFullyQualifiedName}();"),
                 ParseForStatement(
-                    $"for (var i=0; i < source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
-                , $"result.Add(source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}());"),
-                ParseStatement("return result;")),
+                    $"for (var i=0; i < _source.{subMapper.SourceMember.Type.LengthExpression}; i++)"
+                , $"_result.Add(_source{subMapper.SourceMember.Type.IndexExpression}.MapperTo{subMapper.DestinationMember.Type.Name}());"),
+                ParseStatement("return _result;")),
             _ => null
         };
 
@@ -83,17 +83,25 @@ public partial class MapperSourceGenerator
             {
                 exist.Add((subMapper.DestinationMember.Type.OriginalFullyQualifiedName, subMapper.SourceMember.Type.OriginalFullyQualifiedName));
             }
-            if (GetBody.Invoke(subMapper) is BlockSyntax body)
+            if (GetBody(subMapper) is BlockSyntax body)
             {
-                yield return MethodDeclaration(ParseName(subMapper.DestinationMember.Type.OriginalFullyQualifiedName), Identifier($"MapperTo{subMapper.DestinationMember.Type.Name}"))
-               .WithModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.StaticKeyword)
-               .WithParameterList(
-                   ParameterList(
-                       SingletonSeparatedList(
-                           Parameter(Identifier("source"))
-                           .WithModifiers(SyntaxKind.ThisKeyword)
-                           .WithType(ParseName(subMapper.SourceMember.Type.OriginalFullyQualifiedName)))))
-               .WithBody(body);
+                yield return  LocalFunctionStatement(
+                        IdentifierName(subMapper.DestinationMember.Type.OriginalFullyQualifiedName),
+                        Identifier($"MapperTo{subMapper.DestinationMember.Type.Name}"))
+                    .WithModifiers(
+                        TokenList(
+                            Token(SyntaxKind.StaticKeyword)))
+                    .WithParameterList(
+                        ParameterList(
+                            SingletonSeparatedList(
+                                Parameter(
+                                    Identifier("_source"))
+                                .WithType(
+                                    IdentifierName(subMapper.SourceMember.Type.OriginalFullyQualifiedName)))))
+                    .WithBody(body);
+
+              
+               ;
             }
 
 
@@ -109,7 +117,7 @@ public partial class MapperSourceGenerator
 
         @object.Mappers.ForEach(mapper =>
         statementSyntaxes.Add(ParseStatement($"{mapper.TypeName} {mapper.MemberName}Mapper = {mapper.Expression};")));
-
+        statementSyntaxes.AddRange(CreateIEnumerableMapperMetho(@object));
         @object.Members.ForEach(member =>
         {
             var tmpExpression = member.NeedMapper
@@ -119,7 +127,7 @@ public partial class MapperSourceGenerator
 
         });
         @object.SubMappers?.ForEach(mapper =>
-        statementSyntaxes.Add(ParseStatement($"result.{mapper.DestinationMember.MemberName} = source.{mapper.MapperExpression};")));
+        statementSyntaxes.Add(ParseStatement($"result.{mapper.DestinationMember.MemberName} = {mapper.MapperExpression};")));
 
         statementSyntaxes.Add(ParseStatement("return result;"));
         return statementSyntaxes.ToArray();
@@ -134,17 +142,10 @@ public partial class MapperSourceGenerator
         .WithModifiers(@object.DeclaredAccessibility.ConvertSyntaxKind())
         .WithMembers(CreateMember(@object.Members).ToSyntaxList());
 
-    private MemberDeclarationSyntax CreateMapper(SourceObejct @object)
-    {
-        List<MemberDeclarationSyntax> members = new()
-        {
-            CreateBaseMapperMethod(@object)
-        };
-        members.AddRange(CreateIEnumerableMapperMetho(@object));
-        return ClassDeclaration($"{@object.DestinationType.Name}Mapper")
-        .WithModifiers(@object.DeclaredAccessibility.ConvertSyntaxKind(), SyntaxKind.StaticKeyword, SyntaxKind.PartialKeyword).WithMembers(members.ToSyntaxList());
-    }
-
+    private MemberDeclarationSyntax CreateMapper(SourceObejct @object) =>
+        ClassDeclaration($"{@object.DestinationType.Name}Mapper")
+        .WithModifiers(@object.DeclaredAccessibility.ConvertSyntaxKind(), SyntaxKind.StaticKeyword, SyntaxKind.PartialKeyword)
+        .WithMembers(List(new MemberDeclarationSyntax[]{ CreateBaseMapperMethod(@object) } ));
     private CompilationUnitSyntax CreateCompilationUnitSyntax(
         SyntaxList<UsingDirectiveSyntax> usingDirectiveSyntaxes
         , string @namespace
