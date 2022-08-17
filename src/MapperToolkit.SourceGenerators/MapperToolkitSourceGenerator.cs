@@ -34,14 +34,20 @@ public partial class MapperSourceGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(methoSymbols, (context, item) =>
         {
             var constructorDeclaration = item.Symbol.DeclaringSyntaxReferences.FirstOrDefaultSyntax<ConstructorDeclarationSyntax>();
-            var expressionStatementSyntaxs = constructorDeclaration!.Body!.Statements.Filter<ExpressionStatementSyntax>();
+            if (constructorDeclaration is null or { Body: null })
+            {
+                return;
+            }
+
+
+            var expressionStatementSyntaxs = constructorDeclaration.Body.Statements.Filter<ExpressionStatementSyntax>();
 
 
 
             foreach (var expressionStatementSyntax in expressionStatementSyntaxs)
             {
                 var methoInfos = expressionStatementSyntax.Expression.MethoInfoEnumerator(item.SemanticModel);
-
+               
                 var baseInfo = expressionStatementSyntax.Expression.GetBaseInfo();
                 var (filename, code) = CreateCode(methoInfos, baseInfo);
                 context.AddSource(filename, code);
