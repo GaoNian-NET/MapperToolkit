@@ -143,7 +143,7 @@ internal static class SyntaxExtension
 
     {
         null => symbols.OfType<T>().ToImmutableArray(),
-        _ => symbols.Where(filterFunc.Invoke).OfType<T>().ToImmutableArray()
+        _ => symbols.Where(filterFunc).OfType<T>().ToImmutableArray()
     };
 
 
