@@ -110,26 +110,30 @@ public partial class MapperSourceGenerator
     }
     private StatementSyntax[] CreateBaseMapper(SourceObejct @object)
     {
-        List<StatementSyntax> statementSyntaxes = new()
-        {
-            ParseStatement($"{@object.DestinationType.FullyQualifiedName } result = new();")
-        };
+        List<StatementSyntax> statementSyntaxes = new();
 
         @object.Mappers.ForEach(mapper =>
         statementSyntaxes.Add(ParseStatement($"{mapper.TypeName} {mapper.MemberName}Mapper = {mapper.Expression};")));
         statementSyntaxes.AddRange(CreateIEnumerableMapperMetho(@object));
+
+        List<ExpressionSyntax> returnStatements = new();
         @object.Members.ForEach(member =>
         {
             var tmpExpression = member.NeedMapper
-                   ? $"result.{member.MemberName} = {member.MemberName}Mapper.Invoke(source);"
-                   : $"result.{member.MemberName} = source.{member.BaseMemberName ?? member.MemberName};";
-            statementSyntaxes.Add(ParseStatement(tmpExpression));
+                   ? $"{member.MemberName} = {member.MemberName}Mapper.Invoke(source)"
+                   : $"{member.MemberName} = source.{member.BaseMemberName ?? member.MemberName}";
+            returnStatements.Add(ParseExpression(tmpExpression));
 
         });
         @object.SubMappers?.ForEach(mapper =>
-        statementSyntaxes.Add(ParseStatement($"result.{mapper.DestinationMember.MemberName} = {mapper.MapperExpression};")));
+        returnStatements.Add(ParseExpression($"{mapper.DestinationMember.MemberName} = {mapper.MapperExpression}")));
 
-        statementSyntaxes.Add(ParseStatement("return result;"));
+        //statementSyntaxes.Add(ParseStatement("return result;"));
+        statementSyntaxes.Add( ReturnStatement(
+            ImplicitObjectCreationExpression()
+            .WithInitializer(
+                InitializerExpression(
+                    SyntaxKind.ObjectInitializerExpression,SeparatedList(returnStatements)))));
         return statementSyntaxes.ToArray();
     }
     private MemberDeclarationSyntax CreateBaseMapperMethod(SourceObejct @object)
