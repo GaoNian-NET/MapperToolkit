@@ -1,7 +1,7 @@
 ﻿namespace MapperToolkit.SourceGenerators;
 
 [Generator(LanguageNames.CSharp)]
-public partial class MapperSourceGenerator : IIncrementalGenerator
+public partial class MapperGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -15,7 +15,6 @@ public partial class MapperSourceGenerator : IIncrementalGenerator
             => node is ClassDeclarationSyntax { BaseList: not null }),
             (context, _)
             => ((ITypeSymbol)context.SemanticModel.GetDeclaredSymbol(context.Node)!, context.SemanticModel));
-
 
 
         IncrementalValuesProvider<(ITypeSymbol Symbol, SemanticModel SemanticModel)>

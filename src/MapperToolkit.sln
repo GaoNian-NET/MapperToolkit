@@ -1,13 +1,13 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32714.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperToolkit.SourceGenerators", "MapperToolkit.SourceGenerators\MapperToolkit.SourceGenerators.csproj", "{E1056711-DA1A-452D-AAD8-E1FFA379151A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapperToolkit.Generators", "MapperToolkit.Generators\MapperToolkit.Generators.csproj", "{E1056711-DA1A-452D-AAD8-E1FFA379151A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperToolkit", "MapperToolkit\MapperToolkit.csproj", "{137E376E-47D0-48F9-B0F6-BE792D5F8091}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapperToolkit", "MapperToolkit\MapperToolkit.csproj", "{137E376E-47D0-48F9-B0F6-BE792D5F8091}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperToolkit.Sample", "MapperToolkit.Sample\MapperToolkit.Sample.csproj", "{BD353EBE-368C-4121-B238-BE2D33D22BBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapperToolkit.Sample", "MapperToolkit.Sample\MapperToolkit.Sample.csproj", "{BD353EBE-368C-4121-B238-BE2D33D22BBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

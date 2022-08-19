@@ -14,7 +14,7 @@
 - mapper: object-object mapper .
 - transoform:by object (entity) build specified model (DTO) .
 		</Description>
-		<Version>1.0.1.7-alpha</Version>
+		<Version>1.0.1.9-alpha</Version>
 		<Authors>Nian Gao</Authors>
 		<PackageTags>Mapper SourceGenerator</PackageTags>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -25,6 +25,6 @@
 	
 </PropertyGroup>
 	<ItemGroup Label="Package">
-		<None Include="..\MapperToolkit.SourceGenerators\bin\$(Configuration)\netstandard2.0\MapperToolkit.SourceGenerators.dll" PackagePath="analyzers\dotnet\roslyn4.0\cs" Pack="true" Visible="false" />
+		<None Include="..\MapperToolkit.Generators\bin\$(Configuration)\netstandard2.0\MapperToolkit.Generators.dll" PackagePath="analyzers\dotnet\roslyn4.0\cs" Pack="true" Visible="false" />
 	</ItemGroup>
 </Project>
