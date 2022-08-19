@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators.Models.Info;
+﻿namespace MapperToolkit.Generators.Models.Info;
 
 /// <summary>
 /// 成员信息

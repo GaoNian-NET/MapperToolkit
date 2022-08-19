@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators.Models.Info
+﻿namespace MapperToolkit.Generators.Models.Info
 {
     internal struct SubMapperInfo
     {

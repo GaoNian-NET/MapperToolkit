@@ -2,9 +2,9 @@
 global using System.Collections.Generic;
 global using System.Collections.Immutable;
 global using System.Linq;
-global using MapperToolkit.SourceGenerators.Extensions;
-global using MapperToolkit.SourceGenerators.Models;
-global using MapperToolkit.SourceGenerators.Models.Info;
+global using MapperToolkit.Generators.Extensions;
+global using MapperToolkit.Generators.Models;
+global using MapperToolkit.Generators.Models.Info;
 global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.CSharp;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;

@@ -6,4 +6,3 @@ public interface IAllMapperConfiguration<TSource, TDestination>
     IAllMapperConfiguration<TSource, TDestination> Ignore<TMember>(Func<TDestination, TMember> ignoreExpression);
     
 }
-1

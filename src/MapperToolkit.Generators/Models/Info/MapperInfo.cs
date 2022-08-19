@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Text;
 
-namespace MapperToolkit.SourceGenerators.Models.Info;
+namespace MapperToolkit.Generators.Models.Info;
 
 /// <summary>
 /// 映射器基本信息

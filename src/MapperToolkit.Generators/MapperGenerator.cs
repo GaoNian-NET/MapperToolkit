@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators;
+﻿namespace MapperToolkit.Generators;
 
 [Generator(LanguageNames.CSharp)]
 public partial class MapperGenerator : IIncrementalGenerator

@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators.Models;
+﻿namespace MapperToolkit.Generators.Models;
 internal enum TypeSymbolInfoKind
 {
     Default,

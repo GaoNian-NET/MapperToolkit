@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators.Extensions;
+﻿namespace MapperToolkit.Generators.Extensions;
 
 internal static class SyntaxFactoryExtension
 {

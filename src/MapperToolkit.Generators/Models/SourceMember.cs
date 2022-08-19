@@ -1,4 +1,4 @@
-﻿namespace MapperToolkit.SourceGenerators.Models;
+﻿namespace MapperToolkit.Generators.Models;
 
 /// <summary>
 /// 生成的目标成员

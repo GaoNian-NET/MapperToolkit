@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace MapperToolkit.SourceGenerators.Extensions;
+namespace MapperToolkit.Generators.Extensions;
 
 internal static class MapperToolkitExtension
 {

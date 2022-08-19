@@ -1,9 +1,9 @@
-﻿using static MapperToolkit.SourceGenerators.Extensions.SyntaxFactoryExtension;
+﻿using static MapperToolkit.Generators.Extensions.SyntaxFactoryExtension;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace MapperToolkit.SourceGenerators;
+namespace MapperToolkit.Generators;
 
-public partial class MapperSourceGenerator
+public partial class MapperGenerator
 {
 
 

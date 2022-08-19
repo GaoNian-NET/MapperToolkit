@@ -1,6 +1,6 @@
-﻿namespace MapperToolkit.SourceGenerators;
+﻿namespace MapperToolkit.Generators;
 
-public partial class MapperSourceGenerator
+public partial class MapperGenerator
 {
     private SourceObejct IgnoreMapper(SourceObejct @Object, MethoInfo methoInfo)
     {
