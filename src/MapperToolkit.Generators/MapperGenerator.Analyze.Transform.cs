@@ -6,6 +6,9 @@ public partial class MapperGenerator
 {
     private SourceObejct CreateMemberWithMapper(SourceObejct @object, MethoInfo methoInfo)
     {
+        string? memberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText();
+
+
         SourceMember member = new()
         {
             Type = methoInfo.TypeArgument[0].GetInfo(),
@@ -16,7 +19,7 @@ public partial class MapperGenerator
             && @object.SourceMembersHashMap.TryGetValue(identifier, out var tmpMember))
         {
             member = member with {
-                MemberName = identifier,
+                MemberName = memberName ?? identifier,
                 DeclaredAccessibility = tmpMember.Accessibility,
                 BaseMemberName = identifier };
             @object.SourceMembersHashMap[identifier] = tmpMember with { IsDefault = false };
@@ -27,12 +30,11 @@ public partial class MapperGenerator
 
             var typeArgument = methoInfo.TypeArgument[0].GetInfo();
             var parameterType = methoInfo.ParameterSymbols.First().Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            var memberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText();
-
+            
 
             member = member with
             {
-                MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
+                MemberName = memberName,
                 DeclaredAccessibility = Accessibility.Public,
                 NeedMapper = true,
                 Type = methoInfo.TypeArgument[0].GetInfo()
@@ -49,7 +51,6 @@ public partial class MapperGenerator
             @object.SourceMembersHashMap[memberName] = @object.SourceMembersHashMap[memberName] with { IsDefault = false };
 
         }
-
         if (methoInfo.ParameterSymbols.Length == 3)
         {
             var attributeConfigs =
