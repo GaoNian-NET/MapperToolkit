@@ -8,7 +8,6 @@ public partial class MapperGenerator
     {
         SourceMember member = new()
         {
-            //MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
             Type = methoInfo.TypeArgument[0].GetInfo(),
             AttributeConfigs = new(),
 

@@ -2,7 +2,9 @@
 public interface IAllTransformConfiguration<TSource>
 {
     IAllTransformConfiguration<TSource> Map<TMember>
-        (Func<TSource, TMember> transformExpression, string? memberName = null, params Attribute[] attrs);
+        (Func<TSource, TMember> transformExpression, params Attribute[] attrs);
+    IAllTransformConfiguration<TSource> Map<TMember>
+        (Func<TSource, TMember> transformExpression, string memberName, params Attribute[] attrs);
 
     IAllTransformConfiguration<TSource> Map<TMember>
         (Func<TSource, TMember> transformExpression, string? memberName = null);
