@@ -8,7 +8,7 @@ public partial class MapperGenerator
     {
         SourceMember member = new()
         {
-            MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
+            //MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
             Type = methoInfo.TypeArgument[0].GetInfo(),
             AttributeConfigs = new(),
 
@@ -16,7 +16,10 @@ public partial class MapperGenerator
         if (methoInfo.ExpressionSyntaxes[0].GetLambdaExpressionBodyIdentifier() is string identifier
             && @object.SourceMembersHashMap.TryGetValue(identifier, out var tmpMember))
         {
-            member = member with { DeclaredAccessibility = tmpMember.Accessibility, BaseMemberName = identifier };
+            member = member with {
+                MemberName = identifier,
+                DeclaredAccessibility = tmpMember.Accessibility,
+                BaseMemberName = identifier };
             @object.SourceMembersHashMap[identifier] = tmpMember with { IsDefault = false };
 
         }
@@ -30,6 +33,7 @@ public partial class MapperGenerator
 
             member = member with
             {
+                MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
                 DeclaredAccessibility = Accessibility.Public,
                 NeedMapper = true,
                 Type = methoInfo.TypeArgument[0].GetInfo()
