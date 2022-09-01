@@ -1,4 +1,6 @@
-﻿namespace MapperToolkit.Generators;
+﻿using System.ComponentModel;
+
+namespace MapperToolkit.Generators;
 
 public partial class MapperGenerator
 {
@@ -8,6 +10,7 @@ public partial class MapperGenerator
         {
             MemberName = methoInfo.ExpressionSyntaxes[1].GetStringLiteralExpressionGetValueText(),
             Type = methoInfo.TypeArgument[0].GetInfo(),
+            AttributeConfigs = new(),
 
         };
         if (methoInfo.ExpressionSyntaxes[0].GetLambdaExpressionBodyIdentifier() is string identifier
@@ -42,6 +45,20 @@ public partial class MapperGenerator
             });
             @object.SourceMembersHashMap[memberName] = @object.SourceMembersHashMap[memberName] with { IsDefault = false };
 
+        }
+
+        if (methoInfo.ParameterSymbols.Length == 3)
+        {
+            var attributeConfigs =
+            methoInfo.ExpressionSyntaxes.OfType<ObjectCreationExpressionSyntax>();
+
+            foreach (var attributeConfig in attributeConfigs)
+            {
+                member.AttributeConfigs.Add((attributeConfig.Type.ToFullString()
+                    ,attributeConfig.ArgumentList?.Arguments
+                    , attributeConfig.Initializer?.Expressions));
+                
+            }
         }
         @object.Members.Add(member);
 

@@ -1,4 +1,5 @@
-﻿using static MapperToolkit.Generators.Extensions.SyntaxFactoryExtension;
+﻿using System.Linq;
+using static MapperToolkit.Generators.Extensions.SyntaxFactoryExtension;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace MapperToolkit.Generators;
@@ -14,6 +15,17 @@ public partial class MapperGenerator
         for (var i = 0; i < members.Count(); i++)
         {
             var crruent = members.ElementAt(i);
+
+            var attribute =
+                crruent.AttributeConfigs.Select(x =>
+                    AttributeList(SingletonSeparatedList(Attribute(IdentifierName(x.AttributeName))
+                   .WithArgumentList(
+                         AttributeArgumentList(
+                             SeparatedList(x.Arguments?.Select(arg => AttributeArgument(arg.Expression)))
+                             .AddRange(x.ArgumentExpressions?.Select(arge => AttributeArgument(arge)) ?? Enumerable.Empty<AttributeArgumentSyntax>()
+                         )))))
+                    );
+                   
             var tree =
             PropertyDeclaration(
                     IdentifierName(crruent.Type.OriginalFullyQualifiedName),
@@ -30,7 +42,11 @@ public partial class MapperGenerator
                             AccessorDeclaration(
                                 SyntaxKind.SetAccessorDeclaration)
                             .WithSemicolonToken(
-                                Token(SyntaxKind.SemicolonToken))})));
+                                Token(SyntaxKind.SemicolonToken))})))
+
+
+
+                .WithAttributeLists(attribute.ToSyntaxList());
             memberDeclarationSyntaxes[i] = tree;
         }
         return memberDeclarationSyntaxes;

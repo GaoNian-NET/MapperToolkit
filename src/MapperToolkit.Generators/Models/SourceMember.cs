@@ -1,5 +1,4 @@
 ﻿namespace MapperToolkit.Generators.Models;
-
 /// <summary>
 /// 生成的目标成员
 /// </summary>
@@ -25,6 +24,11 @@ internal record struct SourceMember
     /// 是否产生映射
     /// </summary>
     internal bool NeedMapper;
+
+    internal List<(string AttributeName,
+
+        SeparatedSyntaxList<ArgumentSyntax>? Arguments,
+         SeparatedSyntaxList<ExpressionSyntax>? ArgumentExpressions)> AttributeConfigs;
 
 
 }
